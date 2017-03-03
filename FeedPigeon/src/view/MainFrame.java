@@ -1,5 +1,7 @@
 package view;
 
+import environment.Environment;
+
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
@@ -19,9 +21,11 @@ public class MainFrame extends JFrame implements Observer {
     private JPanel[][] gamePanelSquares = null;
     private ArrayList<TilePanel> realTileMap;
     private int size;
-    public MainFrame(int size) {
+    private Environment env;
+    public MainFrame(int size, Environment env) {
         super(TITLE);
         this.size = size;
+        this.env = env;
         gamePanelSquares = new JPanel[size][size];
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 800);
@@ -51,8 +55,9 @@ public class MainFrame extends JFrame implements Observer {
         for (int i = 0; i < gamePanelSquares.length; i++) {
             for (int j = 0; j < gamePanelSquares[i].length; j++) {
                 JPanel panel;
-                panel = new TilePanel(i, j);
+                panel = new TilePanel(i, j, env );
                 tileMap.add((TilePanel) panel);
+                //addMouseListener((TilePanel)panel);
                 gamePanelSquares[i][j] = panel;
             }
         }

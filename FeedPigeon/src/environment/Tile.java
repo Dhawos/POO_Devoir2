@@ -7,7 +7,7 @@ import java.util.Observable;
  */
 public class Tile extends Observable {
     private Position position;
-    private boolean hasFood =false;
+    private boolean hasFood = false;
 
     public Tile(int x, int y) {
         this.position = new Position(x,y);
