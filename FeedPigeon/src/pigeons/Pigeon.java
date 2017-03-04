@@ -16,7 +16,6 @@ public class Pigeon extends Observable implements Observer,Runnable {
     private Position position;
     private Environment env;
     private Random rng = new Random();
-    //public boolean flag = false;
 
     public Pigeon(Environment env) {
         this.position = new Position();
@@ -41,6 +40,9 @@ public class Pigeon extends Observable implements Observer,Runnable {
                 }
 
                 Tile freshestFood = this.env.getFreshestFoodLocation();
+                Food foodToEat = freshestFood.getFood();
+                //int tileY = freshestFood.getY();
+                //int tileX = freshestFood.getX();
                 if (this.position.getY() < freshestFood.getY()){
                     moveRight();
                 }else if(this.position.getY() > freshestFood.getY()){
@@ -50,14 +52,21 @@ public class Pigeon extends Observable implements Observer,Runnable {
                 }else if(this.position.getX() > freshestFood.getX()){
                     moveUp();
                 }else{
-                    synchronized (freshestFood.getFood()){
-                        eatFood(freshestFood.getFood());
+                    synchronized (foodToEat){
+                        eatFood(foodToEat);
                     }
 
                 }
 
+            }catch(NullPointerException ex){
+                try{
+                    System.out.println("nullPointerException : " + ex + " Catched");
+                    Thread.sleep(1000);
+                }catch(Exception exc){
+                    exc.printStackTrace();
+                }
             }catch(Exception ex){
-               ex.printStackTrace();
+                ex.printStackTrace();
             }
         }
     }
