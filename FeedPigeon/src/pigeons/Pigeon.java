@@ -46,7 +46,7 @@ public class Pigeon extends Observable implements Observer,Runnable {
                     eatFood();
                 }
             }catch(Exception ex){
-
+                System.out.println(ex.getMessage());
             }
         }
     }
@@ -93,6 +93,6 @@ public class Pigeon extends Observable implements Observer,Runnable {
         Tile tileToEat = this.env.getMap().getTile(this.position.getX(), this.position.getY());
         tileToEat.removeFood();
         this.setChanged();
-        this.notifyObservers();
+        this.notifyObservers(tileToEat);
     }
 }

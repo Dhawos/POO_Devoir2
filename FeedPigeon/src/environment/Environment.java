@@ -28,7 +28,7 @@ public class Environment {
         for(int i = 0; i < map.getNbLines();i++){
             for(int j = 0; j < map.getNbTilesInLine(i);j++){
                 Tile currentTile = map.getTile(i,j);
-                if(currentDate.compareTo(currentTile.getFood().getDate()) < 0){
+                if(currentTile.getFood() != null && currentDate.compareTo(currentTile.getFood().getDate()) > 0){
                     freshestTile = currentTile;
                     currentDate = currentTile.getFood().getDate();
                 }
