@@ -7,7 +7,8 @@ import java.util.Observable;
  */
 public class Tile extends Observable {
     private Position position;
-    private boolean hasFood = false;
+    private Food food = null;
+
 
     public Tile(int x, int y) {
         this.position = new Position(x,y);
@@ -19,7 +20,7 @@ public class Tile extends Observable {
 
     public Tile(Tile other){
         this.position = new Position(other.getPosition());
-        this.hasFood = other.isHasFood();
+        this.food = other.food;
     }
 
     public int getX() {
@@ -35,14 +36,23 @@ public class Tile extends Observable {
     }
 
     public boolean isHasFood() {
-        return hasFood;
+        return food != null;
     }
 
-    public void setHasFood(boolean hasFood) {
-        this.hasFood = hasFood;
+    public Food getFood() {
+        return food;
+    }
+
+    public void addFood() {
+        food = new Food();
         setChanged();
         notifyObservers();
-        //System.out.println("Dirt has been set on tile (" + position.getX() + "," + position.getY()+ ").");
+    }
+
+    public void removeFood() {
+        food = null;
+        setChanged();
+        notifyObservers();
     }
 
 }

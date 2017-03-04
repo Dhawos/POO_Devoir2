@@ -57,7 +57,6 @@ public class MainFrame extends JFrame implements Observer {
                 JPanel panel;
                 panel = new TilePanel(i, j, env );
                 tileMap.add((TilePanel) panel);
-                //addMouseListener((TilePanel)panel);
                 gamePanelSquares[i][j] = panel;
             }
         }

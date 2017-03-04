@@ -3,6 +3,8 @@ package view;
 import environment.Environment;
 import environment.Position;
 import environment.Tile;
+import pigeons.Pigeon;
+import pigeons.PigeonSet;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -51,12 +53,26 @@ public class TilePanel extends JPanel implements Observer,MouseListener {
                 label.setText("");
             }
         }
+        else{
+            PigeonSet set = env.getPigeonSet();
+            boolean pigeonFound = false;
+            for(Pigeon pigeon : set.getSet()){
+                if(pigeon.getPosition().getX() == xPos && pigeon.getPosition().getY() == yPos){
+                    setBackground(Color.BLUE);
+                    pigeonFound = true;
+                    break;
+                }
+            }
+            if(!pigeonFound){
+                setBackground(Color.WHITE);
+            }
+        }
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
         Tile tile = env.getMap().getTile(xPos,yPos);
-        tile.setHasFood(true);
+        tile.addFood();
     }
 
     @Override
