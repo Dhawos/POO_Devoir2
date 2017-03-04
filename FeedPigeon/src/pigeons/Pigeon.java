@@ -6,6 +6,7 @@ import environment.Tile;
 
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Random;
 
 /**
  * Created by dhawo on 03/03/2017.
@@ -13,6 +14,7 @@ import java.util.Observer;
 public class Pigeon extends Observable implements Observer,Runnable {
     private Position position;
     private Environment env;
+    private Random rng = new Random();
 
     public Pigeon(Environment env) {
         this.position = new Position();
@@ -26,9 +28,10 @@ public class Pigeon extends Observable implements Observer,Runnable {
 
     @Override
     public void run() {
+
         while(true){
             try{
-                Thread.sleep(1000);
+                Thread.sleep(Math.abs(rng.nextInt(1000)));
                 if (!this.env.isThereFood()){
                     break;
                 }
@@ -46,7 +49,7 @@ public class Pigeon extends Observable implements Observer,Runnable {
                     eatFood();
                 }
             }catch(Exception ex){
-                System.out.println(ex.getMessage());
+               ex.printStackTrace();
             }
         }
     }
