@@ -32,8 +32,7 @@ public class Pigeon extends Observable implements Observer,Runnable {
         while(true){
             try{
                 Thread.sleep(Math.abs(rng.nextInt(1000)));
-                if (!this.env.isThereFood()){
-                    break;
+                while (!this.env.isThereFood()){
                 }
 
                 Tile freshestFood = this.env.getFreshestFoodLocation();
