@@ -1,6 +1,7 @@
 package pigeons;
 
 import environment.Environment;
+import environment.Food;
 import environment.Position;
 import environment.Tile;
 
@@ -15,7 +16,7 @@ public class Pigeon extends Observable implements Observer,Runnable {
     private Position position;
     private Environment env;
     private Random rng = new Random();
-    public boolean flag = false;
+    //public boolean flag = false;
 
     public Pigeon(Environment env) {
         this.position = new Position();
@@ -33,14 +34,6 @@ public class Pigeon extends Observable implements Observer,Runnable {
         while(true){
             try{
 
-                if (flag) {
-                    try {
-                        System.out.println("the thread pigeon" + Thread.currentThread().getName() + "is going to wait()");
-                        wait();
-                    }catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
                 //Thread.sleep(Math.abs(rng.nextInt(1000)));
                 Thread.sleep(1000);
                 while (!this.env.isThereFood()){
@@ -57,16 +50,10 @@ public class Pigeon extends Observable implements Observer,Runnable {
                 }else if(this.position.getX() > freshestFood.getX()){
                     moveUp();
                 }else{
-                    if (flag) {
-                        try {
-                            System.out.println("the thread pigeon" + Thread.currentThread().getName() + "is going to wait()");
-                            wait();
-                        }catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }else{
-                        eatFood();
+                    synchronized (freshestFood.getFood()){
+                        eatFood(freshestFood.getFood());
                     }
+
                 }
 
             }catch(Exception ex){
@@ -77,6 +64,19 @@ public class Pigeon extends Observable implements Observer,Runnable {
 
     public Position getPosition() {
         return position;
+    }
+
+    public synchronized void eatFood(Food food){
+        Tile tileToEat = this.env.getMap().getTile(this.position.getX(), this.position.getY());
+        if (!tileToEat.isHasFood()){
+            System.out.println("the thread pigeon" + Thread.currentThread().getName() + " couldn't ate the food on position : (" + this.getPosition().getX() + ", " + this.getPosition().getY() +")");
+            return;
+        }
+        tileToEat.removeFood();
+        System.out.println("the thread pigeon" + Thread.currentThread().getName() + " has eaten the food on position : (" + this.getPosition().getX() + ", " + this.getPosition().getY() +")");
+        this.setChanged();
+        this.notifyObservers(tileToEat);
+
     }
 
     @Override
@@ -111,17 +111,5 @@ public class Pigeon extends Observable implements Observer,Runnable {
         this.position.setX(this.position.getX() + 1);
         this.setChanged();
         this.notifyObservers();
-    }
-
-    public synchronized void eatFood(){
-        flag = true;
-        notify();
-        Tile tileToEat = this.env.getMap().getTile(this.position.getX(), this.position.getY());
-        tileToEat.removeFood();
-        System.out.println("the thread pigeon" + Thread.currentThread().getName() + " has eaten the food on position : (" + this.getPosition().getX() + ", " + this.getPosition().getY() +")");
-        this.setChanged();
-        this.notifyObservers(tileToEat);
-        flag = false;
-        notifyAll();
     }
 }
