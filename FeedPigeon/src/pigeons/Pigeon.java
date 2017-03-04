@@ -2,6 +2,7 @@ package pigeons;
 
 import environment.Environment;
 import environment.Position;
+import environment.Tile;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -28,7 +29,22 @@ public class Pigeon extends Observable implements Observer,Runnable {
         while(true){
             try{
                 Thread.sleep(1000);
-                moveRight();
+                if (!this.env.isThereFood()){
+                    break;
+                }
+
+                Tile freshestFood = this.env.getFreshestFoodLocation();
+                if (this.position.getY() < freshestFood.getY()){
+                    moveRight();
+                }else if(this.position.getY() > freshestFood.getY()){
+                    moveLeft();
+                }else if(this.position.getX() < freshestFood.getX()){
+                    moveDown();
+                }else if(this.position.getX() > freshestFood.getX()){
+                    moveUp();
+                }else{
+                    eatFood();
+                }
             }catch(Exception ex){
 
             }
@@ -51,6 +67,31 @@ public class Pigeon extends Observable implements Observer,Runnable {
 
     public void moveRight(){
         this.position.setY(this.position.getY() + 1);
+        this.setChanged();
+        this.notifyObservers();
+    }
+
+    public void moveLeft(){
+        this.position.setY(this.position.getY() - 1);
+        this.setChanged();
+        this.notifyObservers();
+    }
+
+    public void moveUp(){
+        this.position.setX(this.position.getX() - 1);
+        this.setChanged();
+        this.notifyObservers();
+    }
+
+    public void moveDown(){
+        this.position.setX(this.position.getX() + 1);
+        this.setChanged();
+        this.notifyObservers();
+    }
+
+    public void eatFood(){
+        Tile tileToEat = this.env.getMap().getTile(this.position.getX(), this.position.getY());
+        tileToEat.removeFood();
         this.setChanged();
         this.notifyObservers();
     }

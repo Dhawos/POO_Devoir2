@@ -37,6 +37,17 @@ public class Environment {
         return freshestTile;
     }
 
+    public boolean isThereFood(){
+        for(int i = 0; i < map.getNbLines();i++){
+            for(int j = 0; j < map.getNbTilesInLine(i);j++){
+                Tile currentTile = map.getTile(i,j);
+                if(currentTile.isHasFood()){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     public PigeonSet getPigeonSet() {
         return pigeonSet;
     }
