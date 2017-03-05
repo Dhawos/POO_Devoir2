@@ -2,6 +2,7 @@ import controller.RunController;
 import environment.Environment;
 import environment.Tile;
 import pigeons.Pigeon;
+import pigeons.ScarePigeons;
 import view.MainFrame;
 import view.TilePanel;
 
@@ -28,6 +29,9 @@ public class Simulator {
             main.threads.add(new Thread(main.environment.getPigeonSet().getSet().get(i)));
             main.threads.get(i).start();
         }
+        ScarePigeons threadScarePigeons = new ScarePigeons(main.environment);
+        main.threads.add(new Thread(threadScarePigeons));
+        main.threads.get(main.threads.size()-1).start();
     }
 
     public void initView() {

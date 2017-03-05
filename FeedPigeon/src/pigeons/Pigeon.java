@@ -32,31 +32,48 @@ public class Pigeon extends Observable implements Observer,Runnable {
 
         while(true){
             try{
+                if (this.env.isFlagScarePigeons()){
+                    System.out.println("the thread pigeon" + Thread.currentThread().getName() + "is scared");
+
+                    for (int i =0; i <5; i++) {
+                        Thread.sleep(500);
+                        goToRandomTile();
+                    }
+
+                    this.env.getCounter().incrementAndGet();
+                    while (this.env.getCounter().get() < this.env.getNbPigeons()){
+                        System.out.println("count = " + this.env.getCounter().get());
+                        Thread.sleep(1000);
+                    }
+                    Thread.sleep(8000);
+                    this.env.getCounter().set(0);
+                    this.env.setFlagScarePigeons(false);
+                    System.out.println("the thread pigeon" + Thread.currentThread().getName() + "is not scared anymore");
+                }
 
                 //Thread.sleep(Math.abs(rng.nextInt(1000)));
                 Thread.sleep(1000);
-                while (!this.env.isThereFood()){
-                    Thread.sleep(100);
-                }
 
-                Tile freshestFood = this.env.getFreshestFoodLocation();
-                Food foodToEat = freshestFood.getFood();
-                //int tileY = freshestFood.getY();
-                //int tileX = freshestFood.getX();
-                if (this.position.getY() < freshestFood.getY()){
-                    moveRight();
-                }else if(this.position.getY() > freshestFood.getY()){
-                    moveLeft();
-                }else if(this.position.getX() < freshestFood.getX()){
-                    moveDown();
-                }else if(this.position.getX() > freshestFood.getX()){
-                    moveUp();
-                }else{
-                    synchronized (foodToEat){
-                        eatFood(foodToEat);
+                if (this.env.isThereFood()){
+                    Tile freshestFood = this.env.getFreshestFoodLocation();
+                    Food foodToEat = freshestFood.getFood();
+
+                    if (this.position.getY() < freshestFood.getY()){
+                        moveRight();
+                    }else if(this.position.getY() > freshestFood.getY()){
+                        moveLeft();
+                    }else if(this.position.getX() < freshestFood.getX()){
+                        moveDown();
+                    }else if(this.position.getX() > freshestFood.getX()){
+                        moveUp();
+                    }else{
+                        synchronized (foodToEat){
+                            eatFood(foodToEat);
+                        }
+
                     }
-
                 }
+
 
             }catch(NullPointerException ex){
                 try{
@@ -69,6 +86,25 @@ public class Pigeon extends Observable implements Observer,Runnable {
                 ex.printStackTrace();
             }
         }
+    }
+
+    private void goToRandomTile() {
+
+        int direction = Math.abs(rng.nextInt(3));
+        if (direction == 0){
+            moveUp();
+        }
+        if (direction == 1){
+            moveDown();
+        }
+        if (direction == 2){
+            moveRight();
+        }
+        if (direction == 3){
+            moveLeft();
+        }
+
+
     }
 
     public Position getPosition() {
@@ -87,6 +123,7 @@ public class Pigeon extends Observable implements Observer,Runnable {
         this.notifyObservers(tileToEat);
 
     }
+
 
     @Override
     public void update(Observable o, Object arg) {

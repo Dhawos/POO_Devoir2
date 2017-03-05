@@ -2,8 +2,11 @@ package environment;
 
 import pigeons.Pigeon;
 import pigeons.PigeonSet;
+import pigeons.ScarePigeons;
+
 import java.util.Date;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by dhawo on 27/02/2017.
@@ -13,6 +16,26 @@ public class Environment {
     private Map map;
     private PigeonSet pigeonSet = new PigeonSet();
     private static int NB_PIGEONS = 10;
+    private boolean flagScarePigeons = false;
+    private final AtomicInteger counter = new AtomicInteger(0);
+
+    public AtomicInteger getCounter() {
+        return counter;
+    }
+
+
+    public static int getNbPigeons() {
+        return NB_PIGEONS;
+    }
+
+    public boolean isFlagScarePigeons() {
+        return flagScarePigeons;
+    }
+
+    public void setFlagScarePigeons(boolean flagScarePigeons) {
+        this.flagScarePigeons = flagScarePigeons;
+    }
+
 
     public Environment() {
         map = new Map();
