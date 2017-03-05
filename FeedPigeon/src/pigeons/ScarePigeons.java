@@ -18,10 +18,13 @@ public class ScarePigeons implements Runnable {
         while(true){
             try{
                 Thread.sleep(1000);
-                if(Math.abs(rng.nextInt(100)) > 90){
+                if(Math.abs(rng.nextInt(50)) > Math.abs(rng.nextInt(100))){
                     System.out.println("flag scarePigeons true!");
                     this.env.setFlagScarePigeons(true);
-                    Thread.sleep(20000);
+                    Thread.sleep(6000);
+                    this.env.setFlagScarePigeons(false);
+                    System.out.println("flag scarePigeons false!");
+                    Thread.sleep(6000);
                 }
             }catch(Exception ex){
                 ex.printStackTrace();

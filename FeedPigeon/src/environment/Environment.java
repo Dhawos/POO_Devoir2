@@ -17,16 +17,6 @@ public class Environment {
     private PigeonSet pigeonSet = new PigeonSet();
     private static int NB_PIGEONS = 10;
     private boolean flagScarePigeons = false;
-    private final AtomicInteger counter = new AtomicInteger(0);
-
-    public AtomicInteger getCounter() {
-        return counter;
-    }
-
-
-    public static int getNbPigeons() {
-        return NB_PIGEONS;
-    }
 
     public boolean isFlagScarePigeons() {
         return flagScarePigeons;

@@ -32,29 +32,12 @@ public class Pigeon extends Observable implements Observer,Runnable {
 
         while(true){
             try{
-                if (this.env.isFlagScarePigeons()){
-                    System.out.println("the thread pigeon" + Thread.currentThread().getName() + "is scared");
-
-                    for (int i =0; i <5; i++) {
-                        Thread.sleep(500);
-                        goToRandomTile();
-                    }
-
-                    this.env.getCounter().incrementAndGet();
-                    while (this.env.getCounter().get() < this.env.getNbPigeons()){
-                        System.out.println("count = " + this.env.getCounter().get());
-                        Thread.sleep(1000);
-                    }
-                    Thread.sleep(8000);
-                    this.env.getCounter().set(0);
-                    this.env.setFlagScarePigeons(false);
-                    System.out.println("the thread pigeon" + Thread.currentThread().getName() + "is not scared anymore");
-                }
-
                 //Thread.sleep(Math.abs(rng.nextInt(1000)));
                 Thread.sleep(1000);
+                if (this.env.isFlagScarePigeons()){
+                    goToRandomTile();
 
-                if (this.env.isThereFood()){
+                }else if (this.env.isThereFood()){
                     Tile freshestFood = this.env.getFreshestFoodLocation();
                     Food foodToEat = freshestFood.getFood();
 
@@ -136,26 +119,35 @@ public class Pigeon extends Observable implements Observer,Runnable {
     }
 
     public void moveRight(){
-        this.position.setY(this.position.getY() + 1);
-        this.setChanged();
-        this.notifyObservers();
+        if(this.position.getY() != this.env.getMap().getNbLines()-1){
+            this.position.setY(this.position.getY() + 1);
+            this.setChanged();
+            this.notifyObservers();
+        }
+
     }
 
     public void moveLeft(){
-        this.position.setY(this.position.getY() - 1);
-        this.setChanged();
-        this.notifyObservers();
+        if(this.position.getY() != 0) {
+            this.position.setY(this.position.getY() - 1);
+            this.setChanged();
+            this.notifyObservers();
+        }
     }
 
     public void moveUp(){
-        this.position.setX(this.position.getX() - 1);
-        this.setChanged();
-        this.notifyObservers();
+        if(this.position.getX() != 0) {
+            this.position.setX(this.position.getX() - 1);
+            this.setChanged();
+            this.notifyObservers();
+        }
     }
 
     public void moveDown(){
-        this.position.setX(this.position.getX() + 1);
-        this.setChanged();
-        this.notifyObservers();
+        if(this.position.getX() != this.env.getMap().getNbLines()-1) {
+            this.position.setX(this.position.getX() + 1);
+            this.setChanged();
+            this.notifyObservers();
+        }
     }
 }
